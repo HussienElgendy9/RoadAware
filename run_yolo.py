@@ -1,10 +1,10 @@
-import torch
 import cv2
 import numpy as np
-from ultralytics import YOLO
-import torchvision.transforms as T
+import torch
 import torchvision
+import torchvision.transforms as T
 
+from ultralytics import YOLO
 
 # === CONFIG ===
 VIDEO_PATH = "Test_Video.mp4"
@@ -44,13 +44,14 @@ class RoadSegmenter:
     def __init__(self, model, device):
         self.model = model
         self.device = device
-        self.transform = T.Compose([
-            T.ToPILImage(),
-            T.Resize(SEG_INPUT_SIZE),
-            T.ToTensor(),
-            T.Normalize(mean=[0.485, 0.456, 0.406],
-                        std=[0.229, 0.224, 0.225])
-        ])
+        self.transform = T.Compose(
+            [
+                T.ToPILImage(),
+                T.Resize(SEG_INPUT_SIZE),
+                T.ToTensor(),
+                T.Normalize(mean=[0.485, 0.456, 0.406], std=[0.229, 0.224, 0.225]),
+            ]
+        )
 
     def segment_road(self, frame):
         frame_rgb = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
@@ -112,7 +113,7 @@ class VideoProcessor:
             cv2.imshow("Free Space Mask", free_space_mask)
             cv2.imshow("BEV Map", bev_map)
 
-            if cv2.waitKey(1) & 0xFF == ord('q'):
+            if cv2.waitKey(1) & 0xFF == ord("q"):
                 break
 
             frame_count += 1
